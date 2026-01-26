@@ -8,7 +8,6 @@ description = "Modern API wrapper for endfield built on asyncio and pydantic."
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "asyncio>=4.0.0",
     "httpx>=0.25.0",
     "pycryptodome>=3.23.0",
     "pydantic>=2.0.0,<3.0.0",

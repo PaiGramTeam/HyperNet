@@ -15,7 +15,7 @@ class DailyRewardAttendance(APIModel):
 
 
 class DailyRewardInfo(APIModel):
-    currentTs: str
+    currentTs: DateTimeField
     calendar: list[DailyRewardItem]
     first: list[DailyRewardItem]
     resourceInfoMap: dict[str, DailyRewardAttendance]
