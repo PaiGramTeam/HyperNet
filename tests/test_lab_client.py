@@ -29,6 +29,12 @@ class TestLabClient:
         assert user_info.nickname is not None
 
     @staticmethod
+    async def test_get_lab_show_user_id(client_instance: "LabClient"):
+        lab_user_id = await client_instance.get_lab_show_user_id()
+        assert lab_user_id is not None
+        assert isinstance(lab_user_id, int)
+
+    @staticmethod
     async def test_get_game_accounts(client_instance: "LabClient"):
         game_accounts = await client_instance.get_game_accounts()
         assert len(game_accounts) > 0

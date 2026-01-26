@@ -3,7 +3,7 @@ from typing import Optional
 from hypernet.client.base import BaseClient
 from hypernet.models.lab.account import UserCheckInfo
 from hypernet.models.lab.game_role import GameRole
-from hypernet.utils.enums import Game
+from hypernet.utils.enums import Game, Region
 
 __all__ = ("LabClient",)
 
@@ -25,6 +25,28 @@ class LabClient(BaseClient):
         path = "user/check"
         req = await self.request_base_api(path, cred=cred)
         return UserCheckInfo(**req)
+
+    async def get_lab_show_user_id(
+        self,
+        cred: Optional[str] = None,
+    ) -> int:
+        """Get the lab user ID of the currently logged-in user.
+
+        Args:
+            cred (Optional[str]): The cred cookie to use for the request. Defaults to self.cookies.cred if not provided.
+
+        Returns:
+            int: The lab user ID.
+        """
+        if self.region is Region.CHINESE:
+            path = "user"
+            req = await self.request_base_api(path, cred=cred)
+            uid = req["user"]["showId"]
+        else:
+            path = "../v2/user"
+            req = await self.request_base_api(path, cred=cred)
+            uid = req["user"]["basicUser"]["id"]
+        return int(uid)
 
     async def get_game_accounts(
         self,
