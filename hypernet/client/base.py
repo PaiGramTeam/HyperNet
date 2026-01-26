@@ -317,7 +317,8 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         if cred is not None:
             headers["cred"] = cred
         if token is not None:
-            sign, header_ca = generate_dynamic_secret(token, url, method, params, data)
+            did = await self.get_device_id()
+            sign, header_ca = generate_dynamic_secret(token, url, method, params, data, did)
             headers.update(header_ca)
             headers["sign"] = sign
 
