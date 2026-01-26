@@ -178,8 +178,9 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         if is_json:
             headers["Content-Type"] = "application/json"
         headers["user-agent"] = self.user_agent
-        headers["x-language"] = self.lang
-        headers["sk-language"] = self.lang2
+        if self.region is Region.OVERSEAS:
+            headers["x-language"] = self.lang
+            headers["sk-language"] = self.lang2
         return headers
 
     async def request(
