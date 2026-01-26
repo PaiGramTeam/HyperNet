@@ -38,6 +38,7 @@ def generate_dynamic_secret(
     method: str = "get",
     data: typing.Any = None,
     params: typing.Optional[QueryParamTypes] = None,
+    did: str = "",
 ):
     p = urlparse(str(url))
     if method.lower() == "get":
@@ -51,9 +52,9 @@ def generate_dynamic_secret(
                 query_str = urlencode(params)
         else:
             query_str = ""
-        sign, header_ca = generate_signature(token, p.path, query_str)
+        sign, header_ca = generate_signature(token, p.path, query_str, did)
     else:
-        sign, header_ca = generate_signature(token, p.path, json.dumps(data) if data is not None else "")
+        sign, header_ca = generate_signature(token, p.path, json.dumps(data) if data is not None else "", did)
     return sign, header_ca
 
 
