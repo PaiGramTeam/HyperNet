@@ -72,6 +72,20 @@ class Cookies(_Cookies):
     def hg_id(self, value: IntStr) -> None:
         self.set("hg_id", str(value))
 
+    @property
+    def lab_user_id(self) -> Optional[IntStr]:
+        lab_user_id = self.get("lab_user_id")
+        if lab_user_id is not None:
+            try:
+                return int(lab_user_id)
+            except ValueError:
+                return lab_user_id
+        return None
+
+    @lab_user_id.setter
+    def lab_user_id(self, value: IntStr) -> None:
+        self.set("lab_user_id", str(value))
+
     def get(
         self,
         name: str,
@@ -103,9 +117,10 @@ class CookiesModel(BaseModel, frozen=False):
     """A model that represents the cookies used by the client."""
 
     hg_token: Optional[str] = None
+    hg_id: Optional[IntStr] = None
 
     cred: Optional[str] = None
-    hg_id: Optional[IntStr] = None
+    lab_user_id: Optional[IntStr] = None
 
     def to_dict(self):
         """Return the cookies as a dictionary."""

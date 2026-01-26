@@ -65,6 +65,7 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         cookies: typing.Optional[typing.Union[str, CookieTypes]] = None,
         headers: typing.Optional[HeaderTypes] = None,
         hg_id: typing.Optional[int] = None,
+        account_id: typing.Optional[int] = None,
         player_id: typing.Optional[int] = None,
         region: Region = Region.OVERSEAS,
         lang: str = "zh-cn",
@@ -82,6 +83,7 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         self.headers = Headers(headers)
         self.player_id = player_id
         self.hg_id = hg_id or self._cookies.hg_id
+        self.account_id = account_id or self._cookies.lab_user_id
         self.client = AsyncClient(timeout=timeout)
         self.region = region
         self.lang = lang

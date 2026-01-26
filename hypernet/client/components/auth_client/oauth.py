@@ -4,7 +4,7 @@ from hypernet.client.base import BaseClient
 
 __all__ = ("AuthOAuthClient",)
 
-from hypernet.client.cookies import Cookies
+from hypernet.client.cookies import CookiesModel
 from hypernet.client.routes import AS_BASE_API_URL, BASE_API_URL
 from hypernet.errors import BadRequest
 from hypernet.models.lab.account import AccountInfo
@@ -73,7 +73,7 @@ class AuthOAuthClient(BaseClient):
         self,
         grant_code: str,
         kind: Optional[int] = 1,
-    ) -> Cookies:
+    ) -> CookiesModel:
         url = BASE_API_URL.get_url(self.region) / "user/auth/generate_cred_by_code"
         device_id = await self.get_device_id()
         headers_pre = {
@@ -94,18 +94,20 @@ class AuthOAuthClient(BaseClient):
             json=data,
             headers=headers,
         )
-        cookie = Cookies()
+        cookie = CookiesModel()
         cookie.cred = req["cred"]
-        cookie.account_id = req["userId"]
+        cookie.lab_user_id = req["userId"]
         return cookie
 
     async def refresh_cookies_by_hg_token(
         self,
         hg_token: Optional[str] = None,
-    ) -> Cookies:
+    ) -> CookiesModel:
         resp = await self.get_grant_code_by_hg_token(hg_token=hg_token)
         grant_code = resp["code"]
         cookies = await self.get_cred_by_grant_code(grant_code)
+        cookies.hg_token = hg_token or self.cookies.hg_token
+        cookies.hg_id = self.cookies.hg_id
         self.cookies.cred = cookies.cred
-        self.cookies.account_id = cookies.account_id
-        return self.cookies
+        self.cookies.lab_user_id = cookies.lab_user_id
+        return cookies

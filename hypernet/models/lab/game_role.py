@@ -1,17 +1,17 @@
 from typing import List, Optional
 
-from hypernet.models.base import APIModel
+from hypernet.models.base import APIModel, Field
 
 
 class GameRoleBindingRole(APIModel):
     serverId: int
-    roleId: int
+    uid: int = Field(alias="roleId")
     nickname: str
     level: int
     isDefault: bool
     isBanned: bool
     serverType: str
-    serverName: str
+    server_name: str = Field(alias="serverName")
 
 
 class GameRoleBindingListItem(APIModel):
