@@ -81,7 +81,7 @@ class SklandSign:
             return sign_token
 
     @classmethod
-    async def get_cached_sign_token(cls) -> str:
+    async def get_cached_sign_token(cls, force: bool) -> str:
         """
         获取缓存的签名密钥，支持自动重试和缓存机制
         - 缓存有效期1小时
@@ -92,9 +92,10 @@ class SklandSign:
         instance = cls()
 
         # 检查缓存是否有效
-        async with instance._cache_lock:
-            if instance._cached_sign_token and instance._cache_expiry and datetime.now() < instance._cache_expiry:
-                return instance._cached_sign_token
+        if not force:
+            async with instance._cache_lock:
+                if instance._cached_sign_token and instance._cache_expiry and datetime.now() < instance._cache_expiry:
+                    return instance._cached_sign_token
 
         # 缓存失效，需要重新获取
         retry_count = 0

@@ -103,8 +103,8 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         return await SklandDeviceFP().get_cached_device_id()
 
     @staticmethod
-    async def get_sign_token() -> str:
-        return await SklandSign().get_cached_sign_token()
+    async def get_sign_token(force: bool = False) -> str:
+        return await SklandSign().get_cached_sign_token(force)
 
     @property
     def app_version(self) -> str:
