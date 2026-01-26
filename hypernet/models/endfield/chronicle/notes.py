@@ -12,6 +12,7 @@ class EndfieldNoteSkportBp(APIModel):
         curLevel (int): 当前的通行证等级。
         maxLevel (int): 通行证的最大等级。
     """
+
     curLevel: int
     maxLevel: int
 
@@ -24,6 +25,7 @@ class EndfieldNoteSkportDailyMission(APIModel):
         dailyActivation (int): 当前每日活跃度。
         maxDailyActivation (int): 每日活跃度的最大值。
     """
+
     dailyActivation: int
     maxDailyActivation: int
 
@@ -37,6 +39,7 @@ class EndfieldNoteSkportDungeon(APIModel):
         maxStamina (int): 体力值的最大容量。
         maxTs (DateTimeField): 体力完全恢复的时间戳。
     """
+
     curStamina: int
     maxStamina: int
     maxTs: DateTimeField
