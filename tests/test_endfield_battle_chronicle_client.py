@@ -26,5 +26,10 @@ async def endfield_client(endfield_player_id: int, region: "Region", cookies: "C
 class TestEndfieldBattleChronicleClient:
     @staticmethod
     async def test_get_endfield_notes(endfield_client: "EndfieldBattleChronicleClient"):
-        notes = await endfield_client.get_endfield_notes(request_player_id=False)
+        notes = await endfield_client.get_endfield_notes()
         assert notes is not None
+
+    @staticmethod
+    async def test_get_endfield_card_detail(endfield_client: "EndfieldBattleChronicleClient"):
+        card_detail = await endfield_client.get_endfield_card_detail()
+        assert card_detail is not None

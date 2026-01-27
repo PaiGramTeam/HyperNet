@@ -4,8 +4,8 @@ __all__ = ("EndfieldBattleChronicleClient",)
 
 from hypernet.client.base import BaseClient
 from hypernet.errors import AccountNotFound
-from hypernet.models.endfield.chronicle.notes import EndfieldNote, EndfieldNoteSkport
-from hypernet.utils.enums import Region
+from hypernet.models.endfield.chronicle.card import EndfieldCardDetail
+from hypernet.models.endfield.chronicle.notes import EndfieldNote
 from hypernet.utils.player import recognize_endfield_server
 
 if TYPE_CHECKING:
@@ -43,29 +43,29 @@ class EndfieldBattleChronicleClient(BaseClient):
                     return role.uid
         raise AccountNotFound()
 
-    async def get_endfield_notes_by_info(
+    async def get_endfield_card_detail(
         self,
         cred: Optional[str] = None,
         player_id: Optional[int] = None,
         account_id: Optional[int] = None,
-    ) -> EndfieldNoteSkport:
+    ) -> EndfieldCardDetail:
         """
-        根据提供的信息获取 Endfield 笔记。
+        Retrieve detailed information about an Endfield card.
 
-        该方法通过调用特定的 API 来获取 Endfield 笔记数据，并将返回的数据解析为 EndfieldNoteSkport 对象。
+        This method fetches the details of an Endfield card for a specific player and account.
+        It constructs the necessary API request and processes the response to return the card details.
 
         Args:
-            cred (Optional[str]): 用于请求的 cred cookie。如果未提供，则默认为 self.cookies.cred。
-            player_id (Optional[int]): 用于请求的玩家 ID。如果未提供，则默认为实例的 player_id 属性。
-            account_id (Optional[int]): 用于请求的账户 ID。如果未提供，则默认为实例的 account_id 属性。
+            cred (Optional[str]): The cred cookie to use for the request. Defaults to self.cookies.cred if not provided.
+            player_id (Optional[int]): The player ID to use for the request. Defaults to self.player_id if not provided.
+            account_id (Optional[int]): The account ID to use for the request. Defaults to self.account_id if not provided.
 
         Returns:
-            EndfieldNoteSkport: 包含笔记数据的 EndfieldNoteSkport 对象。
+            EndfieldCardDetail: The detailed information about the Endfield card.
 
         Raises:
-            AccountNotFound: 如果未找到有效的玩家 ID 或账户 ID。
+            AccountNotFound: If the player ID or account ID is not provided or cannot be determined.
         """
-        self.region_specific(False)
         player_id = player_id or self.player_id
         account_id = account_id or self.account_id
         if not player_id or not account_id:
@@ -78,7 +78,7 @@ class EndfieldBattleChronicleClient(BaseClient):
             "userId": account_id,
         }
         req = await self.request_base_api(path, params=params, cred=cred)
-        return EndfieldNoteSkport(**req["detail"], player_id=player_id)
+        return EndfieldCardDetail(**req["detail"], player_id=player_id)
 
     async def get_endfield_notes_by_widget(
         self,
@@ -110,7 +110,6 @@ class EndfieldBattleChronicleClient(BaseClient):
         cred: Optional[str] = None,
         player_id: Optional[int] = None,
         account_id: Optional[int] = None,
-        request_player_id: Optional[bool] = True,
     ) -> EndfieldNote:
         """
         Retrieve Endfield notes based on the region.
@@ -123,7 +122,6 @@ class EndfieldBattleChronicleClient(BaseClient):
             cred (Optional[str]): The cred cookie to use for the request. Defaults to self.cookies.cred if not provided.
             player_id (Optional[int]): The player ID to use for the request. Defaults to None.
             account_id (Optional[int]): The account ID to use for the request. Defaults to None.
-            request_player_id (Optional[bool]): Whether to request the player ID. Defaults to True.
 
         Returns:
             EndfieldNote: The retrieved Endfield notes.
@@ -131,8 +129,5 @@ class EndfieldBattleChronicleClient(BaseClient):
         Raises:
             AccountNotFound: If no default account or player ID is found.
         """
-        if self.region is Region.CHINESE:
-            return await self.get_endfield_notes_by_widget(cred=cred, request_player_id=request_player_id)
-        else:
-            data = await self.get_endfield_notes_by_info(cred=cred, player_id=player_id, account_id=account_id)
-            return EndfieldNote.from_skport(data)
+        data = await self.get_endfield_card_detail(cred=cred, player_id=player_id, account_id=account_id)
+        return EndfieldNote.from_skport(data)

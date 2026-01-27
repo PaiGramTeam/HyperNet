@@ -66,6 +66,7 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         headers: typing.Optional[HeaderTypes] = None,
         hg_id: typing.Optional[int] = None,
         account_id: typing.Optional[int] = None,
+        account_show_id: typing.Optional[int] = None,
         player_id: typing.Optional[int] = None,
         region: Region = Region.OVERSEAS,
         lang: str = "zh-cn",
@@ -84,6 +85,7 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         self.player_id = player_id
         self.hg_id = hg_id or self._cookies.hg_id
         self.account_id = account_id or self._cookies.lab_user_id
+        self.account_show_id = account_show_id or self._cookies.lab_show_user_id
         self.client = AsyncClient(timeout=timeout)
         self.region = region
         self.lang = lang
@@ -318,7 +320,7 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
             headers["cred"] = cred
         if token is not None:
             did = await self.get_device_id()
-            sign, header_ca = generate_dynamic_secret(token, url, method, params, data, did)
+            sign, header_ca = generate_dynamic_secret(token, url, method, data, params, did)
             headers.update(header_ca)
             headers["sign"] = sign
 

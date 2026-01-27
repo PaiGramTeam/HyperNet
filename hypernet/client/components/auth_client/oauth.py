@@ -103,11 +103,17 @@ class AuthOAuthClient(BaseClient):
         self,
         hg_token: Optional[str] = None,
     ) -> CookiesModel:
+        hg_token = hg_token or self.cookies.hg_token
         resp = await self.get_grant_code_by_hg_token(hg_token=hg_token)
         grant_code = resp["code"]
         cookies = await self.get_cred_by_grant_code(grant_code)
-        cookies.hg_token = hg_token or self.cookies.hg_token
+        cookies.hg_token = hg_token
         cookies.hg_id = self.cookies.hg_id
+        cookies.lab_show_user_id = self.cookies.lab_show_user_id
+
         self.cookies.cred = cookies.cred
         self.cookies.lab_user_id = cookies.lab_user_id
+        if self.region == Region.OVERSEAS:
+            cookies.lab_show_user_id = cookies.lab_user_id
+            self.cookies.lab_show_user_id = cookies.lab_user_id
         return cookies
