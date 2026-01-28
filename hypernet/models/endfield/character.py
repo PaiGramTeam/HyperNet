@@ -135,7 +135,7 @@ class EndfieldCharacterEquipData(APIModel):
     type: EndfieldCharacterKV
     properties: list[str]
     isAccessory: bool
-    suit: EndfieldCharacterEquipSuit
+    suit: Optional[EndfieldCharacterEquipSuit] = None
 
     function: str
     pkg: str

@@ -241,6 +241,7 @@ _TBR = type[BadRequest]
 _errors: dict[int, Union[_TBR, str, tuple[_TBR, Optional[str]]]] = {
     10000: InvalidTokens,
     10002: InvalidCookies,
+    10003: TimedOut,
 }
 
 ERRORS: dict[int, tuple[_TBR, Optional[str]]] = {

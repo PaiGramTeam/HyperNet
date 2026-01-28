@@ -20,7 +20,7 @@ header_for_sign = {
 
 
 def generate_signature(token: str, path: str, body_or_query: str, did: str = "") -> tuple[str, dict[str, str]]:
-    t = str(int(time.time()) - 1)
+    t = str(int(time.time()) - 2)
     _token = token.encode("utf-8")
     header_ca = header_for_sign.copy()
     header_ca["timestamp"] = t
