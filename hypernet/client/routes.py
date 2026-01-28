@@ -1,3 +1,4 @@
+import base64
 from typing import Union
 from urllib.parse import urljoin
 
@@ -16,6 +17,9 @@ __all__ = (
     "GameRoute",
     "BASE_API_URL",
     "AS_BASE_API_URL",
+    "BINDING_BASE_API_URL",
+    "U8_BASE_API_URL",
+    "GAME_HUB_BASE_API_URL",
 )
 
 
@@ -202,5 +206,23 @@ class GameRoute(BaseRoute):
         return self.urls[region][game]
 
 
-BASE_API_URL = InternationalRoute(overseas="https://zonai.skport.com/api/v1", chinese="https://zonai.skland.com/api/v1")
-AS_BASE_API_URL = InternationalRoute(overseas="https://as.gryphline.com", chinese="https://as.hypergryph.com")
+BASE_API_URL = InternationalRoute(
+    overseas="https://zonai.skport.com/api/v1",
+    chinese="https://zonai.skland.com/api/v1",
+)
+AS_BASE_API_URL = InternationalRoute(
+    overseas="https://as.gryphline.com",
+    chinese="https://as.hypergryph.com",
+)
+BINDING_BASE_API_URL = InternationalRoute(
+    overseas="https://binding-api-account-prod.gryphline.com",
+    chinese="https://binding-api-account-prod.hypergryph.com",
+)
+U8_BASE_API_URL = InternationalRoute(
+    overseas=base64.b64decode("aHR0cHM6Ly91OC5ncnlwaGxpbmUuY29t").decode(),
+    chinese=base64.b64decode("aHR0cHM6Ly91OC5oeXBlcmdyeXBoLmNvbQ==").decode(),
+)
+GAME_HUB_BASE_API_URL = InternationalRoute(
+    overseas="https://game-hub.gryphline.com",
+    chinese="https://game-hub.hypergryph.com",
+)

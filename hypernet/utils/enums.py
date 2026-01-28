@@ -5,7 +5,10 @@ __all__ = ("AppCode", "Region", "Game")
 
 class AppCode(str, _enum.Enum):
     SKLAND = "4ca99fa6b56cc2ba"
+    BINDING_CN = "be36d44aa36bfb5b"
+
     SKPORT = "6eb76d4e13aa36e6"
+    BINDING_OS = "3dacefa138426cfe"
 
 
 class Region(str, _enum.Enum):

@@ -43,6 +43,10 @@ class BadRequest(HyperNetException):
             response_message = response.get("message")
             if response_message is not None:
                 self.original = response_message
+            else:
+                response_msg = response.get("msg")
+                if response_msg is not None:
+                    self.original = response_msg
         if message is not None or self.original is not None:
             self.message = message or self.original
 
@@ -242,6 +246,9 @@ _errors: dict[int, Union[_TBR, str, tuple[_TBR, Optional[str]]]] = {
     10000: InvalidTokens,
     10002: InvalidCookies,
     10003: TimedOut,
+    11003: RedemptionInvalid,
+    12001: RedemptionException,
+    13001: RedemptionClaimed,
 }
 
 ERRORS: dict[int, tuple[_TBR, Optional[str]]] = {
@@ -291,8 +298,5 @@ def raise_for_ret_code(data: dict[str, Any]) -> NoReturn:
     if r in ERRORS:
         exc_type, msg = ERRORS[r]
         raise exc_type(data, msg)
-
-    if "redemption" in m:
-        raise RedemptionException(data)
 
     raise BadRequest(data)
