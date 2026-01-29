@@ -12,7 +12,7 @@ class GameRoleBindingRole(APIModel):
     属性:
         isBanned (bool): 是否被封禁。
         serverId (str): 服务器 ID。
-        serverName (str): 服务器名称。
+        server_name (str): 服务器名称。
         uid (int): 角色 ID，字段别名为 roleId。
         nickname (Optional[str]): 角色昵称，可选。
         level (int): 角色等级。
@@ -23,7 +23,7 @@ class GameRoleBindingRole(APIModel):
 
     isBanned: bool
     serverId: str
-    serverName: str
+    server_name: str = Field(alias="serverName")
 
     uid: int = Field(alias="roleId")
     nickname: Optional[str] = None
